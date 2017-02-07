@@ -39,7 +39,7 @@ class MatchMessage(Message):
         self.size = float(msg['size'])
         
     def __str__(self):
-        return "Match: %s: %d ETH @ $%f" % (self.side, self.price/self.size, self.size)
+        return "Match: %s: %f ETH @ $%f" % (self.side, self.size, self.price)
 
 class DoneMessage(Message):
     def __init__(self, msg):
@@ -51,7 +51,7 @@ class DoneMessage(Message):
         
     def __str__(self):
         if(self.price):
-            return "Done: %s: %d ETH @ $%f (%s)" % (self.order_id, self.remaining_size, self.price, self.reason)
+            return "Done: %s: %f ETH @ $%f (%s)" % (self.order_id, self.remaining_size, self.price, self.reason)
         else:
             return "Done: %s: (%s)" % (self.order_id, self.reason)
         

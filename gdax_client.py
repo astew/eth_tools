@@ -14,19 +14,19 @@ class WsClient(GDAX.WebsocketClient):
     def onMessage(self, msg):
         typ = msg['type']
         if(typ == "received"):
-            res = ReceivedMessage(msg)
+            res = gmsg.ReceivedMessage(msg)
         elif(typ == "match"):
-            res = MatchMessage(msg)
+            res = gmsg.MatchMessage(msg)
         elif(typ == "done"):
-            res = DoneMessage(msg)
+            res = gmsg.DoneMessage(msg)
         elif(typ == "open"):
-            res = OpenMessage(msg)
+            res = gmsg.OpenMessage(msg)
         elif(typ == "change"):
-            res = ChangeMessage(msg)
+            res = gmsg.ChangeMessage(msg)
         elif(typ == "error"):
-            res = ErrorMessage(msg)
+            res = gmsg.ErrorMessage(msg)
         elif(typ == "heartbeat"):
-            res = HeartbeatMessage(msg)
+            res = gmsg.HeartbeatMessage(msg)
         else:
             print("Unknown message type:", typ)
             print(msg)
