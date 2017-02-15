@@ -9,3 +9,5 @@ My current usage model here is to place a bash script called "gdax" in ~/bin, wi
 Then the scripts can be executed as though they were sub-commands of "gdax".
 
 For example:  gdax order list --details
+
+Otherwise, the scripts can be invoked on their own as usual (e.g.  "./order.py list --details")
