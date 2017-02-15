@@ -265,6 +265,7 @@ class SimpleOrder():
 
 class OrderBook():
     def __init__(self, msg):
+        self.original_msg = msg
         self.sequence = int(msg['sequence'])
         self.bids = [SimpleOrder(x, level=2) for x in msg['bids']]
         self.asks = [SimpleOrder(x, level=2) for x in msg['asks']]

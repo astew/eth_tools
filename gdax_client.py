@@ -92,8 +92,8 @@ class AuthClient(GDAX.AuthenticatedClient):
         msg = GDAX.AuthenticatedClient.getProductOrderBook(self,json, level, product)
         return gdax_priv.OrderBook(msg)
         
-    def getProductTrades(self, json = None, product=''):
-        msg = GDAX.AuthenticatedClient.getProductTrades(self, json, product)
+    def getProductTrades(self, json = None, product='', before=None, after=None, limit=None):
+        msg = GDAX.AuthenticatedClient.getProductTrades(self, json, product, before=before, after=after, limit=limit)
         return [gdax_priv.Trade(x) for x in msg]
         
  
