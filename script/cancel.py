@@ -16,13 +16,13 @@ parser = argparse.ArgumentParser(description='Cancel one or more active orders.'
 
 group1 = parser.add_mutually_exclusive_group()
 
-group1.add_argument("--all", action="store_const", dest="cancel_type", const="all",
+group1.add_argument("-x", "--all", action="store_const", dest="cancel_type", const="all",
        help="Use this flag to indicate all orders should be canceled.")
-group1.add_argument("--above", action="store_const", dest="cancel_type", const="above",
+group1.add_argument("-a", "--above", action="store_const", dest="cancel_type", const="above",
        help="Use this flag to indicate all orders at or above the specified price should be canceled.")
-group1.add_argument("--below", action="store_const", dest="cancel_type", const="below",
+group1.add_argument("-b", "--below", action="store_const", dest="cancel_type", const="below",
        help="Use this flag to indicate all orders at or below the specified price should be canceled.")
-group1.add_argument("--exact", action="store_const", dest="cancel_type", const="exact", 
+group1.add_argument("-e", "--exact", action="store_const", dest="cancel_type", const="exact", 
        help="Use this flag to indicate all orders with exactly the specified price should be canceled. (Default)")
 
 parser.add_argument('price',type=float, help='The ask price', nargs='?', default=None)

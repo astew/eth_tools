@@ -16,17 +16,17 @@ parser = argparse.ArgumentParser(description='Place a set of ETH buy orders dist
 
 group1 = parser.add_mutually_exclusive_group()
 
-group1.add_argument("--high", action="store_const", dest="price_hilo", const="high", 
+group1.add_argument("-h", "--high", action="store_const", dest="price_hilo", const="high", 
         help="Use this flag to indicate higher-priced orders have greater volume (Default)")
-group1.add_argument("--low", action="store_const", dest="price_hilo", const="low", 
+group1.add_argument("-l", "--low", action="store_const", dest="price_hilo", const="low", 
         help="Use this flag to indicate lower-priced orders have greater volume")
 
 group2 = parser.add_mutually_exclusive_group()
-group2.add_argument('--flat', action='store_const', dest="vol_dist", const="flat", 
+group2.add_argument("-f", '--flat', action='store_const', dest="vol_dist", const="flat", 
         help='Use this flag to indicate that the order volumes should be uniformly distributed (Default)')
-group2.add_argument('--exp', action='store_const', dest='vol_dist', const='exp',
+group2.add_argument("-x", '--exp', action='store_const', dest='vol_dist', const='exp',
         help='Use this flag to indicate that the order volumes should be exponentially distributed')
-group2.add_argument('--lin', action='store_const', dest='vol_dist', const='lin',
+group2.add_argument("-n", '--lin', action='store_const', dest='vol_dist', const='lin',
         help='Use this flag to indicate that the order volumes should be linearly distributed')
 
 parser.add_argument('total_amount', type=float, help='The amount of USD to convert to ETH')

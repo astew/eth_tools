@@ -16,9 +16,9 @@ parser = argparse.ArgumentParser(description='Place a single ETH buy orders at a
 
 group1 = parser.add_mutually_exclusive_group()
 
-group1.add_argument("--eth", action="store_const", dest="vol_type", const="vol_eth", 
+group1.add_argument("-e", "--eth", action="store_const", dest="vol_type", const="vol_eth", 
         help="Use this flag to indicate the volume is specified in ETH, rather than USD.")
-group1.add_argument("--usd", action="store_const", dest="vol_type", const="vol_usd", 
+group1.add_argument("-u", "--usd", action="store_const", dest="vol_type", const="vol_usd", 
         help="Use this flag to indicate the volume is specified in USD, rather than ETH (default)")
 
 

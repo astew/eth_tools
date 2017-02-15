@@ -12,7 +12,7 @@ if (__name__ != '__main__'):
     sys.exit(1)
 
 
-parser = argparse.ArgumentParser(description='Place a set of ETH buy orders distributed over a price range.')
+parser = argparse.ArgumentParser(description='Get information on open buy or sell orders.')
 
 subparsers = parser.add_subparsers(title='Actions', dest='command', 
                                     description='Available Actions', 
@@ -22,9 +22,9 @@ subparsers = parser.add_subparsers(title='Actions', dest='command',
 list_parser = subparsers.add_parser("list",   
                                     help='Get a list of open orders')
 list_group = list_parser.add_mutually_exclusive_group()
-list_group.add_argument("--details", action='store_const', dest='list_type', const='details',
+list_group.add_argument("-d", "--details", action='store_const', dest='list_type', const='details',
                             help='Use this flag to show detailed information on each open order.')
-list_group.add_argument("--brief", action='store_const', dest='list_type', const='brief',
+list_group.add_argument("-b", "--brief", action='store_const', dest='list_type', const='brief',
                             help='Use this flag to show a brief summary of each open order. (Default)')
 list_parser.set_defaults(list_type='brief')
 
