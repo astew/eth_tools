@@ -3,6 +3,7 @@
 import sqlite3
 import eth.gdax_msg as gm
 import datetime
+import numpy as np
 
 
 class Match():
@@ -82,9 +83,9 @@ class DbWrapper():
     def GetLargestTradeId(self):
         c = self.db.cursor()
         
-        c.execute('''SELECT max(trade_id) FROM Match''')
+        c.execute('''SELECT trade_id FROM Match''')
         
-        x = c.fetchone()
+        x = np.max([int(x) for x in c.fetchall()])
         
         return x
         
