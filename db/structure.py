@@ -79,6 +79,15 @@ class DbWrapper():
     def __init__(self, db_conn):
         self.db = db_conn
 
+    def GetLargestTradeId(self):
+        c = self.db.cursor()
+        
+        c.execute('''SELECT max(trade_id) FROM Match''')
+        
+        x = c.fetchone()
+        
+        return x
+        
     def InsertMatch(self, msg, onlyInsertNew = True):
         c = self.db.cursor()
         
