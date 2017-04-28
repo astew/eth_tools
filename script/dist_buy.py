@@ -16,9 +16,9 @@ parser = argparse.ArgumentParser(description='Place a set of ETH buy orders dist
 
 group1 = parser.add_mutually_exclusive_group()
 
-group1.add_argument("-h", "--high", action="store_const", dest="price_hilo", const="high", 
+group1.add_argument("-H", "--high", action="store_const", dest="price_hilo", const="high", 
         help="Use this flag to indicate higher-priced orders have greater volume (Default)")
-group1.add_argument("-l", "--low", action="store_const", dest="price_hilo", const="low", 
+group1.add_argument("-L", "--low", action="store_const", dest="price_hilo", const="low", 
         help="Use this flag to indicate lower-priced orders have greater volume")
 
 group2 = parser.add_mutually_exclusive_group()
@@ -29,7 +29,7 @@ group2.add_argument("-x", '--exp', action='store_const', dest='vol_dist', const=
 group2.add_argument("-n", '--lin', action='store_const', dest='vol_dist', const='lin',
         help='Use this flag to indicate that the order volumes should be linearly distributed')
 
-parser.add_argument('total_amount', type=float, help='The amount of USD to convert to ETH')
+parser.add_argument('total_amount', type=str, help='The amount of USD to convert to ETH')
 parser.add_argument('min_bid',type=float, help='The lower bound for bid price')
 parser.add_argument('max_bid',type=float, help='The upper bound for bid price')
 parser.add_argument('n_orders',type=int, help='Number of orders to create',nargs='?', default=None)
@@ -40,7 +40,7 @@ parser.set_defaults(vol_dist='flat')
 args = parser.parse_args()
 
 if(args.n_orders == None):
-    args.n_orders = int((args.max_bid-args.min_bid)*100)
+    args.n_orders = int((args.max_bid-args.min_bid)*100)+1
 
 #make sure that max_bid and min_bid are at least n_orders
 #cents apart
@@ -54,6 +54,11 @@ if(np.round((args.max_bid-args.min_bid)*100) < args.n_orders-1):
 auth = gcl.AuthClient()
 
 usd_acct = auth.getAccounts()['USD']
+
+if(args.total_amount == 'all'):
+    args.total_amount = usd_acct.available
+else:
+    args.total_amount = float(args.total_amount)
 
 if(usd_acct.available < args.total_amount):
     print("Insufficient USD in account.")

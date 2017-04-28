@@ -16,9 +16,9 @@ parser = argparse.ArgumentParser(description='Place a set of ETH sell orders dis
 
 
 group1 = parser.add_mutually_exclusive_group()
-group1.add_argument("-h", "--high", action="store_const", dest="price_hilo", const="high",
+group1.add_argument("-H", "--high", action="store_const", dest="price_hilo", const="high",
                 help="Use this flag to indicate higher-priced orders have greater volume")
-group1.add_argument("-l", "--low", action="store_const", dest="price_hilo", const="low",
+group1.add_argument("-L", "--low", action="store_const", dest="price_hilo", const="low",
                 help="Use this flag to indicate lower-priced orders have greater volume (Default)")
 
 group2 = parser.add_mutually_exclusive_group()
@@ -29,7 +29,7 @@ group2.add_argument('-x', '--exp', action='store_const', dest='vol_dist', const=
 group2.add_argument('-n', '--lin', action='store_const', dest='vol_dist', const='lin',
                 help='Use this flag to indicate that the order volumes should be linearly distributed')
 
-parser.add_argument('total_amount', type=float, help='The amount of ETH to sell')
+parser.add_argument('total_amount', type=str, help='The amount of ETH to sell')
 parser.add_argument('min_ask',type=float, help='The lower bound for ask price')
 parser.add_argument('max_ask',type=float, help='The upper bound for ask price')
 parser.add_argument('n_orders',type=int, help='Number of orders to create',nargs='?', default=None)
@@ -54,6 +54,12 @@ if(np.round((args.max_ask-args.min_ask)*100) < args.n_orders-1):
 auth = gcl.AuthClient()
 
 eth_acct = auth.getAccounts()['ETH']
+
+if(args.total_amount == 'all'):
+    args.total_amount = eth_acct.available
+else:
+    args.total_amount = float(args.total_amount)
+
 
 if(eth_acct.available < args.total_amount):
     print("Insufficient ETH in account.")

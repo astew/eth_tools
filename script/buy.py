@@ -14,18 +14,10 @@ if (__name__ != '__main__'):
 
 parser = argparse.ArgumentParser(description='Place a single ETH buy orders at a specified price.')
 
-group1 = parser.add_mutually_exclusive_group()
 
-group1.add_argument("-e", "--eth", action="store_const", dest="vol_type", const="vol_eth", 
-        help="Use this flag to indicate the volume is specified in ETH, rather than USD.")
-group1.add_argument("-u", "--usd", action="store_const", dest="vol_type", const="vol_usd", 
-        help="Use this flag to indicate the volume is specified in USD, rather than ETH (default)")
-
-
-parser.add_argument('volume', type=float, help='The amount of USD to spend or ETH to buy')
+parser.add_argument('volume', type=str, help='The amount of USD to spend or ETH to buy. If "all" is specified, all available USD will be used. If a percentage is specified, that percentage of available funds will be used.')
 parser.add_argument('price',type=float, help='The bid price')
 
-parser.set_defaults(vol_type='vol_usd')
 
 args = parser.parse_args()
 
@@ -34,10 +26,7 @@ args = parser.parse_args()
 auth = gcl.AuthClient()
 usd_acct = auth.getAccounts()['USD']
 
-if(args.vol_type == 'vol_usd'):
-    usd_cost = args.volume
-else:
-    usd_cost = args.volume*args.price
+usd_cost = nu.interp_float_str(args.volume, usd_acct.available)
 
 if(usd_acct.available < usd_cost):
     print("Insufficient USD in account.")
@@ -45,7 +34,7 @@ if(usd_acct.available < usd_cost):
     print("Available: $%.2f" % usd_acct.available)
     sys.exit(1)
 
-size = args.volume if(args.vol_type == 'vol_eth') else args.volume / args.price
+size = usd_cost / args.price
 
 size = nu.floor_size(size)
 
@@ -62,4 +51,5 @@ if(order.isError):
     print("... error placing order: %s" % order)
 else:
     print("... order placed: %s" % order)
+    print("Order ID: %s" % order.id)
 

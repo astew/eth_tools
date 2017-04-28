@@ -14,30 +14,18 @@ if (__name__ != '__main__'):
 
 parser = argparse.ArgumentParser(description='Place a single ETH sell order at a specified price.')
 
-group1 = parser.add_mutually_exclusive_group()
 
-group1.add_argument("-e", "--eth", action="store_const", dest="vol_type", const="vol_eth", 
-        help="Use this flag to indicate the volume is specified in ETH, rather than USD. (Default)")
-group1.add_argument("-u", "--usd", action="store_const", dest="vol_type", const="vol_usd", 
-        help="Use this flag to indicate the volume is specified in USD, rather than ETH.")
-
-
-parser.add_argument('volume', type=float, help='The amount of ETH to sell or USD to recover')
+parser.add_argument('volume', type=str, help='The amount of ETH to sell or USD to recover. Use "all" to specify that all of the given currency should be used. If a percentage is specified, then that percentage of available ETH will be used.')
 parser.add_argument('price',type=float, help='The ask price')
 
-parser.set_defaults(vol_type='vol_eth')
 
 args = parser.parse_args()
-
 
 #let's check that we have enough ETH to place this order
 auth = gcl.AuthClient()
 eth_acct = auth.getAccounts()['ETH']
 
-if(args.vol_type == 'vol_eth'):
-    eth_cost = args.volume
-else:
-    eth_cost = args.volume/args.price
+eth_cost = nu.interp_float_str(args.volume, eth_acct.available)
 
 if(eth_acct.available < eth_cost):
     print("Insufficient ETH in account.")
@@ -45,7 +33,7 @@ if(eth_acct.available < eth_cost):
     print("Available: $%.2f" % eth_acct.available)
     sys.exit(1)
 
-size = args.volume if(args.vol_type == 'vol_eth') else args.volume / args.price
+size = eth_cost
 
 size = nu.floor_size(size)
 print("Total cost: $%.2f" % (size*args.price))
@@ -61,4 +49,5 @@ if(order.isError):
     print("... error placing order: %s" % order)
 else:
     print("... order placed: %s" % order)
+    print("Order ID: %s" % order.id)
 
