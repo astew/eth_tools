@@ -85,7 +85,7 @@ class DbWrapper():
         
         c.execute('''SELECT trade_id FROM Match''')
         
-        x = np.max([int(x) for x in c.fetchall()])
+        x = np.max([int(x[0]) for x in c.fetchall()])
         
         return x
         
