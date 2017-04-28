@@ -51,7 +51,6 @@ class AuthClient(GDAX.AuthenticatedClient):
         
     def getAccounts(self):
         msg = GDAX.AuthenticatedClient.getAccounts(self)
-        print msg.message
         return {x['currency']: gdax_priv.Account(x) for x in msg}
     
     def getAccount(self, accountId):
