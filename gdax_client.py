@@ -44,13 +44,14 @@ class WsClient(GDAX.WebsocketClient):
             
 
 class AuthClient(GDAX.AuthenticatedClient):
-    def __init__(self):
+    def __init__(self, auth_path="~/.gdax"):
         fname = os.path.expanduser("~/.gdax")
         key, secret, passphrase = gdax_keys.GetAPIKeys(fname)
         GDAX.AuthenticatedClient.__init__(self, key, secret, passphrase, product_id='ETH-USD')
         
     def getAccounts(self):
         msg = GDAX.AuthenticatedClient.getAccounts(self)
+        print msg.message
         return {x['currency']: gdax_priv.Account(x) for x in msg}
     
     def getAccount(self, accountId):

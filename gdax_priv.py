@@ -13,12 +13,17 @@ class Account():
     """
     def __init__(self, msg):
         self.original_msg = msg
-        self.id = msg['id']
-        self.currency = msg['currency']
-        self.balance = float(msg['balance'])
-        self.available = float(msg['available'])
-        self.hold = float(msg['hold'])
-        self.profile_id = msg['profile_id']
+        
+        if('message' in msg):
+            self.isError = True
+            self.message = msg['message']
+        else:
+            self.id = msg['id']
+            self.currency = msg['currency']
+            self.balance = float(msg['balance'])
+            self.available = float(msg['available'])
+            self.hold = float(msg['hold'])
+            self.profile_id = msg['profile_id']
 	
     def __str__(self):
         return "(%s) Balance: %f\tAvailable: %f\t [%s]" % (self.currency, self.balance, self.available, self.id)
@@ -29,12 +34,17 @@ class AccountHistoryItem():
     """Represents a single record in an account history"""
     def __init__(self, msg):
         self.original_msg = msg
-        self.id = msg['id']
-        self.created_at = parser.parse(msg['created_at'])
-        self.amount = float(msg['amount'])
-        self.balance = float(msg['balance'])
-        self.type = msg['type']
-        self.details = msg.get('details')
+        
+        if('message' in msg):
+            self.isError = True
+            self.message = msg['message']
+        else:
+            self.id = msg['id']
+            self.created_at = parser.parse(msg['created_at'])
+            self.amount = float(msg['amount'])
+            self.balance = float(msg['balance'])
+            self.type = msg['type']
+            self.details = msg.get('details')
 	
     def __str__(self):
         return "(%s) %s: %f\t [%s]" % (self.created_at, self.type, self.amount, self.id)

@@ -79,8 +79,18 @@ class DbWrapper():
     def __init__(self, db_conn):
         self.db = db_conn
 
-    def InsertMatch(self, msg):
+    def InsertMatch(self, msg, onlyInsertNew = True):
         c = self.db.cursor()
+        
+        if(onlyInsertNew):
+            c.execute('''
+            SELECT * FROM Match WHERE trade_id like :trade_id
+            ''', msg.__dict__)
+            
+            if(len(c.fetchall()) > 0):
+                #It's already in there. abort!
+                return
+        
         c.execute('''
         INSERT INTO Match(side, time, price, size, trade_id)
         VALUES (:side, :time, :price, :size, :trade_id)
