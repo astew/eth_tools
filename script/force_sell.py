@@ -27,6 +27,12 @@ elif(sys.argv[1].endswith('%')):
 else:
     size = float(sys.argv[1])
 
+if(len(sys.argv) > 2):
+    min_price = float(sys.argv[2])
+    print("Min price set to $%.2f" % min_price)
+else:
+    min_price = 0.0
+
 if(eth_acct.available < size):
     print("You have insufficient available funds to execute this action.")
     print("ETH Balance: %f ETH\t\tAvailable: %f ETH" % (eth_acct.balance, eth_acct.available))
@@ -54,6 +60,8 @@ while(size >= 0.00001):
     #create an order
     current_size = nu.floor_size(size) 
     prms = gpr.LimitOrderParams(best_ask, current_size, side='sell')
+
+    prms.price = max(best_ask, min_price)
 
     print("Placing sell order: %s" % prms)
     order = auth.sell(prms)

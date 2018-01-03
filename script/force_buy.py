@@ -27,6 +27,13 @@ elif(sys.argv[1].endswith('%')):
 else:
     funds = float(sys.argv[1])
 
+if(len(sys.argv) > 2):
+    max_price = float(sys.argv[2])
+    print("Max price set to : $%.2f" % max_price)
+else:
+    max_price = 100000.0
+
+
 if(usd_acct.available < funds):
     print("You have insufficient available funds to execute this action.")
     print("USD Balance: $%.2f\t\tAvailable: $%.2f" % (usd_acct.balance, usd_acct.available))
@@ -54,6 +61,8 @@ while(funds >= 0.01):
     size = nu.floor_size(size) 
     prms = gpr.LimitOrderParams(best_buy, size, side='buy')
 
+    prms.price = min(best_buy, max_price)
+    
     print("Placing buy order: %s" % prms)
     order = auth.buy(prms)
 
